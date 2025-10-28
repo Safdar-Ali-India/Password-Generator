@@ -1,7 +1,15 @@
+import { useCallback } from "react";
+
  
 
 function App() {
- 
+ const [length, setLength] = useState(10);
+ const [numberAllowed, setNumberAllowed] =useState(false);
+ const [specialCharAllowed, setSpecialCharAllowed] =useState(false);
+
+ const [password, setPassword] = useState('');
+
+ const generatePassword = useCallback( () => {}, [length,numberAllowed, specialCharAllowed, setPassword ] )  
 
   return (
     <>
