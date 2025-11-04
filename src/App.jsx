@@ -7,7 +7,24 @@ function App() {
 
   const [password, setPassword] = useState("")
 
-  const generatePassword = useCallback(() => {}, [length, numberAllowed, specialCharAllowed, setPassword])
+  const generatePassword = useCallback(() => {
+    let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    if (numberAllowed) {
+      chars += "0123456789"
+    }
+    if (specialCharAllowed) {
+      chars += "!@#$%^&*()_+~`|}{[]:;?><,./-="
+    }
+
+    let generatedPassword = ""
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * chars.length)
+      generatedPassword += chars[randomIndex]
+    }
+    setPassword(generatedPassword)
+
+
+  }, [length, numberAllowed, specialCharAllowed, setPassword])
 
   return (
     <>
