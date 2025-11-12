@@ -18,11 +18,11 @@ function App() {
 
     let generatedPassword = ""
     for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * chars.length)
+      const randomIndex = Math.floor(Math.random() * chars.length + 1)
       generatedPassword += chars[randomIndex]
     }
     setPassword(generatedPassword)
-
+    
 
   }, [length, numberAllowed, specialCharAllowed, setPassword])
 
