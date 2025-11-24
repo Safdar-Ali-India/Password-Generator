@@ -14,7 +14,7 @@ function App() {
     }
     if (specialCharAllowed) {
       chars += "!@#$%^&*()_+~`|}{[]:;?><,./-="
-    }
+    } 
    
     let generatedPassword = "" 
     for (let i = 0; i < length; i++) {
