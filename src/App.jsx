@@ -22,7 +22,7 @@ function App() {
       generatedPassword += chars[randomIndex]
     }
     setPassword(generatedPassword)
-     
+       
 
   }, [length, numberAllowed, specialCharAllowed, setPassword])
 
