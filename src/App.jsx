@@ -1,54 +1,57 @@
-import { useState, useCallback, useEffect } from "react"
+import { useState, useCallback, useEffect, useRef } from "react"
 import { Layout } from "./components/Layout"
 
-function App() {
-  const [length, setLength] = useState(10)
-  const [numberAllowed, setNumberAllowed] = useState(false)
+function PasswordGenerator() {
+  const [length, setLength] = useState(12)
+  const [numberAllowed, setNumberAllowed] = useState(true)
   const [specialCharAllowed, setSpecialCharAllowed] = useState(false)
-
   const [password, setPassword] = useState("")
   const [copied, setCopied] = useState(false)
+  const copyTimerRef = useRef(null)
 
   const generatePassword = useCallback(() => {
     let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    if (numberAllowed) {
-      chars += "0123456789"
-    }
-    if (specialCharAllowed) {
-      chars += "!@#$%^&*()_+~`|}{[]:;?><,./-="
-    } 
-   
-    let generatedPassword = "" 
+    if (numberAllowed) chars += "0123456789"
+    if (specialCharAllowed) chars += "!@#$%^&*()_+~`|}{[]:;?><,./-="
+
+    let generatedPassword = ""
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * chars.length)
       generatedPassword += chars[randomIndex]
     }
     setPassword(generatedPassword)
     setCopied(false)
-       
-
   }, [length, numberAllowed, specialCharAllowed])
 
   useEffect(() => {
     generatePassword()
   }, [generatePassword])
 
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
+    }
+  }, [])
+
   const copyToClipboard = async () => {
     if (!password) return
     try {
       await navigator.clipboard.writeText(password)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
+      copyTimerRef.current = setTimeout(() => setCopied(false), 1500)
     } catch {
-      // clipboard api blocked on some browsers without https
+      // clipboard blocked without secure context
     }
   }
 
   return (
-    <Layout>
     <div className="flex flex-1 items-center justify-center py-8">
-      <div className="w-full max-w-md bg-zinc-900 rounded-xl shadow-lg p-6 space-y-5">
-        <h1 className="text-white text-center text-2xl font-semibold">
+      <section
+        className="w-full max-w-md rounded-xl bg-zinc-900 p-6 shadow-lg space-y-5"
+        aria-labelledby="generator-heading"
+      >
+        <h1 id="generator-heading" className="sr-only">
           Password Generator
         </h1>
 
@@ -58,7 +61,8 @@ function App() {
             readOnly
             value={password}
             placeholder="your password"
-            className="flex-1 bg-zinc-800 text-orange-400 px-3 py-2 rounded outline-none"
+            aria-label="Generated password"
+            className="flex-1 min-w-0 bg-zinc-800 text-orange-400 px-3 py-2 rounded outline-none font-mono text-sm"
           />
           <button
             type="button"
@@ -70,11 +74,12 @@ function App() {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm text-zinc-300 flex justify-between">
+          <label htmlFor="length-slider" className="text-sm text-zinc-300 flex justify-between">
             <span>Length</span>
             <span>{length}</span>
           </label>
           <input
+            id="length-slider"
             type="range"
             min={6}
             max={32}
@@ -112,8 +117,15 @@ function App() {
         >
           Generate
         </button>
-      </div>
+      </section>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Layout>
+      <PasswordGenerator />
     </Layout>
   )
 }
