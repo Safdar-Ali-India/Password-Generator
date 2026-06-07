@@ -6,6 +6,7 @@ function App() {
   const [specialCharAllowed, setSpecialCharAllowed] = useState(false)
 
   const [password, setPassword] = useState("")
+  const [copied, setCopied] = useState(false)
 
   const generatePassword = useCallback(() => {
     let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -22,6 +23,7 @@ function App() {
       generatedPassword += chars[randomIndex]
     }
     setPassword(generatedPassword)
+    setCopied(false)
        
 
   }, [length, numberAllowed, specialCharAllowed])
@@ -29,6 +31,17 @@ function App() {
   useEffect(() => {
     generatePassword()
   }, [generatePassword])
+
+  const copyToClipboard = async () => {
+    if (!password) return
+    try {
+      await navigator.clipboard.writeText(password)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // clipboard api blocked on some browsers without https
+    }
+  }
 
   return (
     <div className="min-h-screen bg-zinc-800 flex items-center justify-center p-4">
@@ -45,6 +58,13 @@ function App() {
             placeholder="your password"
             className="flex-1 bg-zinc-800 text-orange-400 px-3 py-2 rounded outline-none"
           />
+          <button
+            type="button"
+            onClick={copyToClipboard}
+            className="bg-zinc-700 hover:bg-zinc-600 text-white px-3 py-2 rounded text-sm shrink-0"
+          >
+            {copied ? "Copied" : "Copy"}
+          </button>
         </div>
 
         <div className="space-y-2">
