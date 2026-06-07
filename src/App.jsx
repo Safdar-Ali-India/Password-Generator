@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react"
+import { Layout } from "./components/Layout"
 
 function App() {
   const [length, setLength] = useState(10)
@@ -44,7 +45,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-800 flex items-center justify-center p-4">
+    <Layout>
+    <div className="flex flex-1 items-center justify-center py-8">
       <div className="w-full max-w-md bg-zinc-900 rounded-xl shadow-lg p-6 space-y-5">
         <h1 className="text-white text-center text-2xl font-semibold">
           Password Generator
@@ -112,6 +114,7 @@ function App() {
         </button>
       </div>
     </div>
+    </Layout>
   )
 }
 
