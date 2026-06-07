@@ -47,7 +47,15 @@ export function SiteFooter() {
         <p className="text-sm text-zinc-400">
           <span className="font-semibold text-zinc-200">{BRAND.name}</span>
           <span className="mx-2 text-zinc-600">|</span>
-          A small gift from Safdar Ali
+          A small gift from{" "}
+          <a
+            href={EXTERNAL_LINKS.portfolio}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-violet-400 hover:text-violet-300 hover:underline"
+          >
+            Safdar Ali
+          </a>
         </p>
 
         <nav className="mt-4 flex items-center justify-center gap-3" aria-label="Social links">
